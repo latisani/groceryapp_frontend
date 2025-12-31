@@ -3,15 +3,16 @@ import axios from 'axios';
 import React, { createContext, useEffect, useState } from 'react'
 import api from '../api';
 
-export const authContext = createContext();
+export const AuthContext = createContext();
 
-export const authProvider = ({ children }) => {
+export const AuthProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
     const loadUser = async () => {
         const token = await AsyncStorage.getItem('token');
         const userJson = await AsyncStorage.getItem('user');
         if(token && userJson) setUser(JSON.parse(userJson));
+        console.log(token);
     };
 
     useEffect(() =>{loadUser();},[]);
@@ -28,13 +29,22 @@ export const authProvider = ({ children }) => {
     }
 
     const register = async (fullname, email, password) => {
-        const res = await api.post('/auth/register',{fullname, email, password});
-        await AsyncStorage.setItem('token', res.data.token);
-        await AsyncStorage.setItem('user', JSON.stringify(res.data.user));
-        setUser(res.data.user);
+    const res = await api.post('/auth/register', { fullname, email, password });
 
+    const token = res.data?.token;
+    const user = res.data?.user;
+
+    if (!token) {
+        console.warn('No token received during registration');
         return res;
     }
+
+    await AsyncStorage.setItem('token', token);
+    await AsyncStorage.setItem('user', JSON.stringify(user));
+    setUser(user);
+
+    return res;
+    };
 
     const logout = async () => {
         await AsyncStorage.removeItem('token');
@@ -44,8 +54,8 @@ export const authProvider = ({ children }) => {
 
 
   return (
-    <authContext.Provider value={{user, login, register, logout}}>
+    <AuthContext.Provider value={{user, login, register, logout}}>
         {children}
-    </authContext.Provider>
+    </AuthContext.Provider>
   )
 }

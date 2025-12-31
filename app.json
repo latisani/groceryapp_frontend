@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "GroceryApp",
-    "slug": "GroceryApp",
+    "name": "Shopping Grocery List",
+    "slug": "ShoppingGroceryListApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,14 +16,25 @@
       "supportsTablet": true
     },
     "android": {
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.shopping.groceryapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0fb9b9cd-8216-4953-a52b-ad0d8cb72c87"
+      }
+    },
+    "owner": "mudaul",
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
